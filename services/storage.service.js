@@ -152,6 +152,7 @@ async function checkBucketAccess() {
 }
 
 module.exports = {
+  storage,
   uploadFile,
   generateSignedUrl,
   uploadFileWithSignedUrl,

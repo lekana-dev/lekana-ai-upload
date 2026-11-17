@@ -332,10 +332,9 @@ app.post(
         });
       }
 
-      const { Storage } = require("@google-cloud/storage");
+      const { storage } = require("./services/storage.service");
       const { decryptBuffer } = require("./utils/encryption");
 
-      const storage = new Storage();
       const bucket = storage.bucket(bucketName);
 
       // Handle different storage path formats
@@ -400,12 +399,18 @@ app.post(
 // ============================================
 // Start Server
 // ============================================
-app.listen(PORT, () => {
-  console.log(`Upload service running on port ${PORT}`);
-  console.log(
-    `Clerk Domain: ${
-      process.env.CLERK_DOMAIN || "teaching-bream-67.clerk.accounts.dev"
-    }`,
-  );
-  console.log(`GCS Bucket: ${bucketName}`);
-});
+// Start a server only when run directly (node server.js).
+// On Vercel the app is imported by api/index.js and served as a function.
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Upload service running on port ${PORT}`);
+    console.log(
+      `Clerk Domain: ${
+        process.env.CLERK_DOMAIN || "teaching-bream-67.clerk.accounts.dev"
+      }`,
+    );
+    console.log(`GCS Bucket: ${bucketName}`);
+  });
+}
+
+module.exports = app;
